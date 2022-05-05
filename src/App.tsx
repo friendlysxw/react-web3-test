@@ -1,8 +1,8 @@
 /*
  * @Author: shixuewen friendlysxw@163.com
  * @Date: 2022-05-04 16:52:33
- * @LastEditors: shixuewen friendlysxw@163.com
- * @LastEditTime: 2022-05-05 08:51:25
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-05-05 14:04:27
  * @FilePath: \app-ts-redux\src\App.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -86,6 +86,36 @@ function App() {
       .then((txHash: any) => console.log({ txHash }))
       .catch((error: any) => console.log({ error }));
   };
+  const handleWatchAsset = async () => {
+    const tokenAddress = "0xd00981105e61274c8a5cd5a88fe7e037d935b513";
+    const tokenSymbol = "TUT";
+    const tokenDecimals = 18;
+    const tokenImage = "http://placekitten.com/200/300";
+
+    try {
+      // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+      const wasAdded = await ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20", // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: tokenDecimals, // The number of decimals in the token
+            image: tokenImage, // A string url of the token logo
+          },
+        },
+      });
+
+      if (wasAdded) {
+        console.log("Thanks for your interest!");
+      } else {
+        console.log("Your loss!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -101,6 +131,8 @@ function App() {
         <button onClick={handleConnectWallet}> 连接以太坊提供者 </button>
         <br />
         <button onClick={handleSendEth}>发起以太坊交易请求</button>
+        <br />
+        <button onClick={handleWatchAsset}>为钱包添加推荐代币</button>
       </header>
     </div>
   );
